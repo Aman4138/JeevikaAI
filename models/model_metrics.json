@@ -1,0 +1,60 @@
+{
+  "timestamp": "2026-08-23T15:00:55.124503",
+  "commodities_evaluated": [
+    "Tomato",
+    "Onion",
+    "Potato"
+  ],
+  "price_prediction_model": {
+    "model_type": "Wholesale Price Prediction (Rs./kg)",
+    "train_samples": 8760,
+    "test_samples": 2190,
+    "baseline": {
+      "algorithm": "Linear Regression",
+      "mae": 2.135,
+      "rmse": 3.106,
+      "r2": 0.899,
+      "mape_pct": 8.15
+    },
+    "improved": {
+      "algorithm": "Gradient Boosting Regressor",
+      "mae": 1.852,
+      "rmse": 2.62,
+      "r2": 0.928,
+      "mape_pct": 7.06
+    },
+    "feature_importance_top": [
+      "price_lag_1d",
+      "price_rolling_mean_7d",
+      "month",
+      "arrivals_rolling_mean_7d"
+    ]
+  },
+  "demand_estimation_model": {
+    "model_type": "Estimated Retail Demand Signal (kg/day)",
+    "disclaimer": "Signal derived from historical sales patterns; represents estimated aggregate vendor demand rather than individualized tracking.",
+    "train_samples": 8760,
+    "test_samples": 2190,
+    "baseline": {
+      "algorithm": "Linear Regression Baseline",
+      "mae": 2.719,
+      "rmse": 3.475,
+      "r2": 0.664,
+      "mape_pct": 9.73
+    },
+    "improved": {
+      "algorithm": "Gradient Boosting Regressor",
+      "mae": 2.71,
+      "rmse": 3.446,
+      "r2": 0.67,
+      "mape_pct": 9.69
+    },
+    "feature_importance_top": [
+      "sales_rolling_mean_7d",
+      "sales_lag_1d",
+      "price_per_kg",
+      "is_weekend",
+      "month"
+    ]
+  }
+}

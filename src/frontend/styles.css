@@ -1,0 +1,79 @@
+/* Custom styling and components for JeevikaAI */
+
+body {
+  font-family: 'Plus Jakarta Sans', 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Quick budget chips */
+.btn-chip {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  color: #94a3b8;
+  transition: all 0.15s ease-in-out;
+}
+
+.btn-chip:hover {
+  border-color: #10b981;
+  color: #f8fafc;
+}
+
+.btn-chip.active {
+  background-color: rgba(16, 185, 129, 0.15);
+  border-color: #10b981;
+  color: #34d399;
+}
+
+/* What-if preset chips */
+.btn-scen-preset {
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  color: #cbd5e1;
+  transition: all 0.15s ease-in-out;
+}
+
+.btn-scen-preset:hover {
+  border-color: #f59e0b;
+  color: #fbbf24;
+}
+
+/* Commodity tabs */
+.tab-comm {
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  color: #94a3b8;
+  transition: all 0.15s ease;
+}
+
+.tab-comm:hover {
+  color: #f8fafc;
+}
+
+.tab-comm.active {
+  background-color: #1e293b;
+  color: #38bdf8;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Custom smooth scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #020617;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}

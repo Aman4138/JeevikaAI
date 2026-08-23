@@ -1,0 +1,10 @@
+[
+  {
+    "version": "v1.1",
+    "timestamp": "2026-08-23T15:00:55.127371",
+    "price_gbm_r2": 0.928,
+    "price_gbm_mae": 1.852,
+    "demand_gbm_r2": 0.67,
+    "demand_gbm_mae": 2.71
+  }
+]

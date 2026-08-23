@@ -1,0 +1,118 @@
+# JeevikaAI Configuration File
+
+project:
+  name: "JeevikaAI"
+  version: "1.0.0"
+  tagline: "Constraint-Aware AI Decision Making for Indian Street & Vegetable Vendors"
+  author: "JeevikaAI Hackathon Team"
+
+paths:
+  raw_data_dir: "data/raw"
+  processed_data_dir: "data/processed"
+  models_dir: "models"
+  metrics_file: "models/model_metrics.json"
+  experiments_log: "models/experiment_log.json"
+  frontend_dir: "src/frontend"
+
+# MVP Focus Commodities
+commodities:
+  tomato:
+    display_name: "Tomato (टमाटर)"
+    hindi_name: "टमाटर"
+    category: "Perishable Vegetable"
+    shelf_life_days: 2.5
+    spoilage_rate_daily: 0.15
+    typical_retail_margin_pct: 0.35
+    default_wholesale_cost_per_kg: 24.0
+    default_retail_price_per_kg: 35.0
+    typical_daily_demand_kg: 20.0
+    unit: "kg"
+    icon: "🍅"
+    color: "#EF4444"
+
+  onion:
+    display_name: "Onion (प्याज़)"
+    hindi_name: "प्याज़"
+    category: "Semi-Perishable Vegetable"
+    shelf_life_days: 21.0
+    spoilage_rate_daily: 0.02
+    typical_retail_margin_pct: 0.25
+    default_wholesale_cost_per_kg: 28.0
+    default_retail_price_per_kg: 38.0
+    typical_daily_demand_kg: 25.0
+    unit: "kg"
+    icon: "🧅"
+    color: "#A855F7"
+
+  potato:
+    display_name: "Potato (आलू)"
+    hindi_name: "आलू"
+    category: "Staple Non-Perishable Vegetable"
+    shelf_life_days: 35.0
+    spoilage_rate_daily: 0.01
+    typical_retail_margin_pct: 0.20
+    default_wholesale_cost_per_kg: 18.0
+    default_retail_price_per_kg: 24.0
+    typical_daily_demand_kg: 30.0
+    unit: "kg"
+    icon: "🥔"
+    color: "#EAB308"
+
+# Supported Mandis & Indian Hubs
+locations:
+  - id: "delhi_azadpur"
+    city: "Delhi"
+    mandi_name: "Azadpur Mandi"
+    state: "Delhi"
+  - id: "mumbai_vashi"
+    city: "Mumbai"
+    mandi_name: "APMC Vashi"
+    state: "Maharashtra"
+  - id: "bengaluru_kolar"
+    city: "Bengaluru"
+    mandi_name: "Kolar APMC"
+    state: "Karnataka"
+  - id: "nashik_lasalgaon"
+    city: "Nashik"
+    mandi_name: "Lasalgaon Mandi"
+    state: "Maharashtra"
+  - id: "agra_fatehabad"
+    city: "Agra"
+    mandi_name: "Fatehabad Mandi"
+    state: "Uttar Pradesh"
+
+# Risk Preferences & Optimizer Parameters
+optimizer:
+  default_budget: 2000.0
+  min_budget: 100.0
+  max_budget: 50000.0
+  risk_profiles:
+    conservative:
+      name: "Conservative (सुरक्षित)"
+      safety_stock_factor: 0.85
+      perishability_penalty_weight: 1.5
+      budget_utilization_target: 0.80
+      demand_quantile: 0.35
+    balanced:
+      name: "Balanced (संतुलित)"
+      safety_stock_factor: 1.0
+      perishability_penalty_weight: 1.0
+      budget_utilization_target: 0.95
+      demand_quantile: 0.50
+    aggressive:
+      name: "Aggressive (उच्च लाभ)"
+      safety_stock_factor: 1.15
+      perishability_penalty_weight: 0.5
+      budget_utilization_target: 1.00
+      demand_quantile: 0.70
+
+# ML Training settings
+training:
+  test_size_ratio: 0.20
+  random_seed: 42
+  price_model:
+    baseline: "LinearRegression"
+    advanced: "GradientBoostingRegressor"
+  demand_model:
+    baseline: "MovingAverage"
+    advanced: "GradientBoostingRegressor"

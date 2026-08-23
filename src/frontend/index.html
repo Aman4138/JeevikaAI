@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JeevikaAI — Constraint-Aware AI for Street Vendors</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Custom Font & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col selection:bg-emerald-500 selection:text-white">
+
+  <!-- TOP APP BAR -->
+  <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 py-3 sm:px-6">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <!-- Logo & Tagline -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20 text-slate-950 font-black text-xl">
+          जी
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl font-extrabold tracking-tight text-white flex items-center gap-1.5">
+              Jeevika<span class="text-emerald-400">AI</span>
+            </h1>
+            <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[11px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+              Hackathon Prototype
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 hidden sm:block" id="app-tagline">
+            Constraint-Aware AI Decision Making for Indian Street & Vegetable Vendors
+          </p>
+        </div>
+      </div>
+
+      <!-- Header Actions -->
+      <div class="flex items-center gap-2.5">
+        <!-- 1-Click Demo Walkthrough Button -->
+        <button id="btn-quick-demo" class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-950 font-bold px-3 py-1.5 rounded-lg text-xs sm:text-sm flex items-center gap-1.5 shadow-md shadow-amber-500/20 transition-all active:scale-95">
+          <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+          <span id="txt-demo-btn">3-Min Demo Flow</span>
+        </button>
+
+        <!-- ML Metrics Modal Trigger -->
+        <button id="btn-metrics-modal" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-2.5 py-1.5 rounded-lg border border-slate-700 flex items-center gap-1 transition">
+          <i data-lucide="activity" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <span class="hidden md:inline">ML Metrics</span>
+        </button>
+
+        <!-- Language Switcher -->
+        <div class="bg-slate-800 border border-slate-700 p-0.5 rounded-lg flex items-center text-xs">
+          <button id="lang-en" class="px-2.5 py-1 rounded font-semibold bg-emerald-500 text-slate-950 transition">English</button>
+          <button id="lang-hi" class="px-2.5 py-1 rounded font-semibold text-slate-400 hover:text-white transition">हिंदी</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-6">
+
+    <!-- HERO BANNER & ETHICAL NOTICE -->
+    <div class="bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-900 border border-emerald-500/20 rounded-2xl p-4 sm:p-5 relative overflow-hidden">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center gap-1 text-xs font-semibold text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+              <span id="badge-novelty">Deterministic Bounded Optimization — Zero AI Hallucinations</span>
+            </span>
+          </div>
+          <h2 class="text-lg sm:text-xl font-bold text-white" id="hero-title">
+            Smart Daily Purchasing & Budget Allocation Engine
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-300 max-w-3xl" id="hero-desc">
+            Empowering small street vendors to maximize daily profit, eliminate perishable vegetable waste, and survive wholesale price shocks.
+          </p>
+        </div>
+        <div class="flex items-center gap-2 shrink-0 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800 text-xs text-slate-400">
+          <i data-lucide="info" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+          <span id="txt-disclaimer">All projections are decision-support estimates grounded in Kaggle mandi data.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2-COLUMN LAYOUT: INPUTS (LEFT) vs DASHBOARD OUTPUTS (RIGHT) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- LEFT COLUMN: VENDOR CONSTRAINTS INPUT (4 COLS) -->
+      <section class="lg:col-span-4 space-y-5">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
+          
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="font-bold text-base text-white flex items-center gap-2">
+              <i data-lucide="sliders" class="w-5 h-5 text-emerald-400"></i>
+              <span id="lbl-vendor-inputs">Vendor Constraints</span>
+            </h3>
+            <span class="text-xs text-slate-400" id="lbl-step1">Step 1</span>
+          </div>
+
+          <!-- 1. Available Budget -->
+          <div class="space-y-2">
+            <label class="text-xs font-semibold text-slate-300 flex justify-between">
+              <span id="lbl-budget">Available Budget (उपलब्ध बजट):</span>
+              <span class="text-emerald-400 font-bold text-sm" id="val-budget-disp">₹2,000</span>
+            </label>
+            <div class="relative">
+              <span class="absolute left-3 top-2.5 text-slate-500 font-bold">₹</span>
+              <input type="number" id="input-budget" min="100" max="50000" step="50" value="2000" 
+                     class="w-full bg-slate-950 border border-slate-700 rounded-xl pl-8 pr-4 py-2 text-white font-bold focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-sm" />
+            </div>
+            <!-- Quick budget chips -->
+            <div class="flex items-center gap-1.5 pt-1">
+              <button type="button" class="btn-chip" data-budget="500">₹500</button>
+              <button type="button" class="btn-chip" data-budget="1000">₹1,000</button>
+              <button type="button" class="btn-chip active" data-budget="2000">₹2,000</button>
+              <button type="button" class="btn-chip" data-budget="3500">₹3,500</button>
+              <button type="button" class="btn-chip" data-budget="5000">₹5,000</button>
+            </div>
+          </div>
+
+          <!-- 2. Location & Mandi Selection -->
+          <div class="space-y-1.5">
+            <label class="text-xs font-semibold text-slate-300" id="lbl-location">
+              Market / City Location (मंडी / शहर):
+            </label>
+            <select id="select-location" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white text-sm focus:outline-none focus:border-emerald-500">
+              <option value="Delhi" selected>Delhi — Azadpur Mandi</option>
+              <option value="Mumbai">Mumbai — APMC Vashi</option>
+              <option value="Bengaluru">Bengaluru — Kolar APMC</option>
+              <option value="Nashik">Nashik — Lasalgaon Mandi</option>
+              <option value="Agra">Agra — Fatehabad Mandi</option>
+            </select>
+          </div>
+
+          <!-- 3. Current Inventory on Hand -->
+          <div class="space-y-2 pt-1 border-t border-slate-800">
+            <div class="flex items-center justify-between">
+              <label class="text-xs font-semibold text-slate-300" id="lbl-inventory-title">
+                Current Stock on Hand (वर्तमान स्टॉक):
+              </label>
+              <span class="text-[11px] text-slate-500">in kg</span>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2">
+              <!-- Tomato -->
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-1">
+                <div class="flex items-center gap-1 text-xs text-rose-400 font-bold">
+                  <span>🍅</span>
+                  <span id="lbl-inv-tomato">Tomato</span>
+                </div>
+                <input type="number" id="inv-tomato" min="0" max="100" step="0.5" value="5.0"
+                       class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-center font-bold text-sm text-white focus:outline-none focus:border-rose-500" />
+              </div>
+
+              <!-- Onion -->
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-1">
+                <div class="flex items-center gap-1 text-xs text-purple-400 font-bold">
+                  <span>🧅</span>
+                  <span id="lbl-inv-onion">Onion</span>
+                </div>
+                <input type="number" id="inv-onion" min="0" max="100" step="0.5" value="3.0"
+                       class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-center font-bold text-sm text-white focus:outline-none focus:border-purple-500" />
+              </div>
+
+              <!-- Potato -->
+              <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800 space-y-1">
+                <div class="flex items-center gap-1 text-xs text-amber-400 font-bold">
+                  <span>🥔</span>
+                  <span id="lbl-inv-potato">Potato</span>
+                </div>
+                <input type="number" id="inv-potato" min="0" max="100" step="0.5" value="8.0"
+                       class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-center font-bold text-sm text-white focus:outline-none focus:border-amber-500" />
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Risk Profile -->
+          <div class="space-y-1.5 pt-1 border-t border-slate-800">
+            <label class="text-xs font-semibold text-slate-300" id="lbl-risk-pref">
+              Risk Preference (जोखिम प्राथमिकता):
+            </label>
+            <div class="grid grid-cols-3 gap-1.5 text-xs">
+              <label class="cursor-pointer">
+                <input type="radio" name="risk_pref" value="conservative" class="peer sr-only" />
+                <div class="p-2 rounded-xl bg-slate-950 border border-slate-800 text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-950/30 peer-checked:text-emerald-300 transition">
+                  <div class="font-bold text-[11px]" id="opt-risk-cons">Conservative</div>
+                  <div class="text-[10px] text-slate-500" id="opt-risk-cons-sub">सुरक्षित</div>
+                </div>
+              </label>
+              <label class="cursor-pointer">
+                <input type="radio" name="risk_pref" value="balanced" checked class="peer sr-only" />
+                <div class="p-2 rounded-xl bg-slate-950 border border-slate-800 text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-950/30 peer-checked:text-emerald-300 transition">
+                  <div class="font-bold text-[11px]" id="opt-risk-bal">Balanced</div>
+                  <div class="text-[10px] text-slate-500" id="opt-risk-bal-sub">संतुलित</div>
+                </div>
+              </label>
+              <label class="cursor-pointer">
+                <input type="radio" name="risk_pref" value="aggressive" class="peer sr-only" />
+                <div class="p-2 rounded-xl bg-slate-950 border border-slate-800 text-center peer-checked:border-emerald-500 peer-checked:bg-emerald-950/30 peer-checked:text-emerald-300 transition">
+                  <div class="font-bold text-[11px]" id="opt-risk-agg">Aggressive</div>
+                  <div class="text-[10px] text-slate-500" id="opt-risk-agg-sub">उच्च लाभ</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- PRIMARY ACTION BUTTON -->
+          <button id="btn-generate-plan" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold py-3 px-4 rounded-xl text-sm sm:text-base flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/25 transition active:scale-[0.98]">
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
+            <span id="btn-plan-text">GENERATE PURCHASE PLAN</span>
+          </button>
+
+        </div>
+
+        <!-- WEATHER & REAL-TIME MARKET BADGE -->
+        <div id="mandi-weather-card" class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+              <i data-lucide="cloud-sun" class="w-4 h-4 text-amber-400"></i>
+              <span id="lbl-weather-context">Mandi Weather & Supply Signal</span>
+            </span>
+            <span id="weather-risk-badge" class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">
+              Clear (Low Rain Risk)
+            </span>
+          </div>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div class="bg-slate-950 p-2 rounded-lg border border-slate-800/80">
+              <span class="text-slate-500 text-[10px]" id="lbl-temp">Temperature</span>
+              <div class="text-white font-bold text-sm" id="val-temp">28.5 °C</div>
+            </div>
+            <div class="bg-slate-950 p-2 rounded-lg border border-slate-800/80">
+              <span class="text-slate-500 text-[10px]" id="lbl-precip">Precipitation</span>
+              <div class="text-white font-bold text-sm" id="val-precip">0.0 mm</div>
+            </div>
+          </div>
+          <p class="text-[11px] text-slate-400 leading-relaxed" id="val-supply-msg">
+            Normal mandi arrival volumes detected; no heavy monsoon disruption expected.
+          </p>
+        </div>
+      </section>
+
+      <!-- RIGHT COLUMN: RESULTS, TABLE, WHAT-IF & EXPLANATION (8 COLS) -->
+      <section class="lg:col-span-8 space-y-6">
+
+        <!-- 1. HIGH-LEVEL KPI METRICS BAR -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <!-- Total Investment -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-1 relative overflow-hidden">
+            <span class="text-xs font-semibold text-slate-400 flex items-center justify-between">
+              <span id="kpi-lbl-invest">Total Investment</span>
+              <i data-lucide="shopping-bag" class="w-3.5 h-3.5 text-blue-400"></i>
+            </span>
+            <div class="text-xl sm:text-2xl font-black text-white" id="kpi-invest">₹0</div>
+            <div class="text-[11px] text-slate-500" id="kpi-invest-sub">Calculated purchase cost</div>
+          </div>
+
+          <!-- Expected Profit -->
+          <div class="bg-gradient-to-br from-emerald-950/60 to-slate-900 border border-emerald-500/30 rounded-2xl p-4 space-y-1 relative overflow-hidden">
+            <span class="text-xs font-semibold text-emerald-400 flex items-center justify-between">
+              <span id="kpi-lbl-profit">Expected Profit</span>
+              <i data-lucide="trending-up" class="w-3.5 h-3.5 text-emerald-400"></i>
+            </span>
+            <div class="text-xl sm:text-2xl font-black text-emerald-400" id="kpi-profit">₹0</div>
+            <div class="text-[11px] text-emerald-400/80 font-medium" id="kpi-roi">ROI: 0%</div>
+          </div>
+
+          <!-- Remaining Cash Buffer -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-1 relative overflow-hidden">
+            <span class="text-xs font-semibold text-slate-400 flex items-center justify-between">
+              <span id="kpi-lbl-remaining">Remaining Cash</span>
+              <i data-lucide="wallet" class="w-3.5 h-3.5 text-amber-400"></i>
+            </span>
+            <div class="text-xl sm:text-2xl font-black text-amber-300" id="kpi-remaining">₹0</div>
+            <div class="text-[11px] text-slate-500" id="kpi-rem-sub">Emergency buffer</div>
+          </div>
+
+          <!-- Risk Level -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-1 relative overflow-hidden">
+            <span class="text-xs font-semibold text-slate-400 flex items-center justify-between">
+              <span id="kpi-lbl-risk">Decision Risk</span>
+              <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-slate-400"></i>
+            </span>
+            <div class="flex items-center gap-2">
+              <span class="text-xl sm:text-2xl font-black" id="kpi-risk-text">LOW</span>
+              <span class="text-xs font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-300" id="kpi-risk-score">0/100</span>
+            </div>
+            <div class="text-[11px] text-slate-500" id="kpi-risk-sub">Prototype indicator</div>
+          </div>
+        </div>
+
+        <!-- 2. OPTIMIZED PURCHASE RECOMMENDATION TABLE -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+            <div>
+              <h3 class="font-bold text-base text-white flex items-center gap-2">
+                <i data-lucide="clipboard-check" class="w-5 h-5 text-emerald-400"></i>
+                <span id="lbl-rec-table-title">Optimized Purchase Quantities</span>
+              </h3>
+              <p class="text-xs text-slate-400" id="lbl-rec-table-subtitle">
+                Guaranteed within available budget • Perishability waste strictly penalized
+              </p>
+            </div>
+            <!-- Grounded Badge -->
+            <span class="inline-flex items-center gap-1 text-[11px] bg-slate-800 text-slate-300 px-2.5 py-1 rounded-full border border-slate-700 self-start sm:self-auto">
+              <i data-lucide="lock" class="w-3 h-3 text-emerald-400"></i>
+              <span>Budget Constraint: <strong id="val-budget-status" class="text-emerald-400">Active</strong></span>
+            </span>
+          </div>
+
+          <!-- Product Cards / Responsive Table -->
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs sm:text-sm">
+              <thead class="text-slate-400 bg-slate-950/60 uppercase text-[11px] tracking-wider border-b border-slate-800">
+                <tr>
+                  <th class="py-3 px-3 rounded-l-lg" id="th-product">Commodity</th>
+                  <th class="py-3 px-2 text-center" id="th-curr-stock">Stock</th>
+                  <th class="py-3 px-2 text-center" id="th-exp-demand">Demand</th>
+                  <th class="py-3 px-3 text-center text-emerald-400 font-bold" id="th-rec-buy">Recommended Buy</th>
+                  <th class="py-3 px-2 text-right" id="th-cost">Cost (₹)</th>
+                  <th class="py-3 px-2 text-right" id="th-profit">Exp. Profit</th>
+                  <th class="py-3 px-3 rounded-r-lg text-center" id="th-item-risk">Perish Risk</th>
+                </tr>
+              </thead>
+              <tbody id="recommendation-tbody" class="divide-y divide-slate-800/60 font-medium">
+                <!-- Populated dynamically via app.js -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 3. EXPLAINABLE AI REASONING (WHY?) -->
+        <div class="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                <i data-lucide="help-circle" class="w-4 h-4"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-base text-white" id="lbl-why-title">Why are we recommending this? (यह सिफारिश क्यों?)</h3>
+                <p class="text-xs text-slate-400" id="lbl-why-sub">Transparent mathematical reasoning grounded in vendor constraints</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Explanation Box -->
+          <div class="bg-slate-950/70 border border-slate-800/80 rounded-xl p-4 space-y-3">
+            <p class="text-xs sm:text-sm text-slate-200 leading-relaxed font-medium" id="txt-explanation-summary">
+              Click "Generate Purchase Plan" to view complete reasoning.
+            </p>
+
+            <!-- Product Reasons List -->
+            <div class="space-y-2 pt-2 border-t border-slate-800" id="list-product-reasons">
+              <!-- Rendered dynamically -->
+            </div>
+
+            <!-- Mathematical Rules Applied -->
+            <div class="pt-2 border-t border-slate-800">
+              <h4 class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-1.5" id="lbl-rules-title">
+                Deterministic Decision Rules Enforced:
+              </h4>
+              <ul class="text-xs text-slate-400 space-y-1 list-disc list-inside" id="list-decision-rules">
+                <!-- Rendered dynamically -->
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. WHAT-IF SIMULATOR STUDIO -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+            <div>
+              <h3 class="font-bold text-base text-white flex items-center gap-2">
+                <i data-lucide="git-branch" class="w-5 h-5 text-amber-400"></i>
+                <span id="lbl-whatif-title">What-If Scenario Simulator</span>
+              </h3>
+              <p class="text-xs text-slate-400" id="lbl-whatif-sub">
+                Stress-test against budget drops, wholesale price surges, and rain shocks
+              </p>
+            </div>
+            <!-- Preset Scenario Chips -->
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <button id="btn-scen-budget-drop" class="btn-scen-preset text-[11px]">₹1,500 Budget</button>
+              <button id="btn-scen-tomato-surge" class="btn-scen-preset text-[11px]">+20% Tomato Price</button>
+              <button id="btn-scen-rain-slump" class="btn-scen-preset text-[11px]">Rainy Day (-20% Demand)</button>
+            </div>
+          </div>
+
+          <!-- Scenario Controls -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-950 p-4 rounded-xl border border-slate-800">
+            <!-- 1. Scenario Budget Slider -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs font-semibold">
+                <span class="text-slate-300" id="lbl-sim-budget">Simulated Budget:</span>
+                <span class="text-amber-400 font-bold" id="val-sim-budget">₹1,500</span>
+              </div>
+              <input type="range" id="slider-sim-budget" min="500" max="5000" step="100" value="1500" 
+                     class="w-full accent-amber-500 bg-slate-800 h-1.5 rounded-lg cursor-pointer" />
+            </div>
+
+            <!-- 2. Tomato Price Shock -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs font-semibold">
+                <span class="text-slate-300" id="lbl-sim-price">Tomato Price Shock:</span>
+                <span class="text-rose-400 font-bold" id="val-sim-price">+0%</span>
+              </div>
+              <input type="range" id="slider-sim-price" min="-40" max="60" step="5" value="0" 
+                     class="w-full accent-rose-500 bg-slate-800 h-1.5 rounded-lg cursor-pointer" />
+            </div>
+
+            <!-- 3. Demand Shock -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs font-semibold">
+                <span class="text-slate-300" id="lbl-sim-demand">Market Demand Shift:</span>
+                <span class="text-blue-400 font-bold" id="val-sim-demand">0%</span>
+              </div>
+              <input type="range" id="slider-sim-demand" min="-50" max="50" step="5" value="0" 
+                     class="w-full accent-blue-500 bg-slate-800 h-1.5 rounded-lg cursor-pointer" />
+            </div>
+          </div>
+
+          <!-- Run Simulator Button -->
+          <div class="flex justify-end">
+            <button id="btn-run-simulation" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs sm:text-sm flex items-center gap-1.5 shadow-md shadow-amber-500/20 transition">
+              <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+              <span id="btn-sim-text">RUN SIMULATION</span>
+            </button>
+          </div>
+
+          <!-- Comparison Delta Output Container -->
+          <div id="what-if-results-container" class="space-y-3 pt-2 border-t border-slate-800">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- 5. MARKET INTELLIGENCE & 14-DAY MANDI TRENDS -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+            <div>
+              <h3 class="font-bold text-base text-white flex items-center gap-2">
+                <i data-lucide="bar-chart-2" class="w-5 h-5 text-teal-400"></i>
+                <span id="lbl-market-hub-title">Mandi Market Intelligence & Price History</span>
+              </h3>
+              <p class="text-xs text-slate-400" id="lbl-market-hub-sub">
+                Recent modal prices (₹/kg) and wholesale arrivals from Kaggle Agmarknet records
+              </p>
+            </div>
+            <!-- Commodity Tabs -->
+            <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
+              <button class="tab-comm active" data-comm="tomato">🍅 Tomato</button>
+              <button class="tab-comm" data-comm="onion">🧅 Onion</button>
+              <button class="tab-comm" data-comm="potato">🥔 Potato</button>
+            </div>
+          </div>
+
+          <!-- Market Summary Cards -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-0.5">
+              <span class="text-slate-500 text-[10px]" id="lbl-latest-modal">Latest Modal Price</span>
+              <div class="text-white font-bold text-base" id="val-mkt-modal">₹24.0 / kg</div>
+              <div class="text-[10px] text-emerald-400 font-semibold" id="val-mkt-trend">+2.4% (7-day)</div>
+            </div>
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-0.5">
+              <span class="text-slate-500 text-[10px]" id="lbl-price-band">Min - Max Band</span>
+              <div class="text-white font-bold text-base" id="val-mkt-band">₹20 - ₹28</div>
+              <div class="text-[10px] text-slate-400">Wholesale spread</div>
+            </div>
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-0.5">
+              <span class="text-slate-500 text-[10px]" id="lbl-retail-price">Estimated Retail Price</span>
+              <div class="text-emerald-400 font-bold text-base" id="val-mkt-retail">₹35.0 / kg</div>
+              <div class="text-[10px] text-slate-400">Typical street rate</div>
+            </div>
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-0.5">
+              <span class="text-slate-500 text-[10px]" id="lbl-arrivals">Recent Mandi Arrivals</span>
+              <div class="text-blue-400 font-bold text-base" id="val-mkt-arrivals">180 Tonnes</div>
+              <div class="text-[10px] text-slate-400">Supply-side signal</div>
+            </div>
+          </div>
+
+          <!-- Chart.js 14-Day Timeseries Canvas -->
+          <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 h-64 relative">
+            <canvas id="marketChart"></canvas>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-900 border-t border-slate-800 py-4 px-6 text-center text-xs text-slate-500 mt-auto">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div>
+        <strong>JeevikaAI</strong> — Hackathon Prototype | AI for Public Good
+      </div>
+      <div>
+        Grounded Decision Support • Kaggle Mandi + Sales + Weather Schemas
+      </div>
+    </div>
+  </footer>
+
+  <!-- ML METRICS MODAL -->
+  <div id="modal-metrics" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="font-bold text-lg text-white flex items-center gap-2">
+          <i data-lucide="activity" class="w-5 h-5 text-emerald-400"></i>
+          ML Model Benchmarks & Evaluation
+        </h3>
+        <button id="btn-close-metrics" class="text-slate-400 hover:text-white text-lg font-bold">&times;</button>
+      </div>
+
+      <div class="space-y-4 text-xs sm:text-sm">
+        <!-- Price Prediction Model Table -->
+        <div class="space-y-1.5">
+          <h4 class="font-bold text-emerald-400">1. Wholesale Price Forecasting (Rs./kg)</h4>
+          <table class="w-full text-left bg-slate-950 rounded-lg overflow-hidden">
+            <thead class="text-slate-400 bg-slate-800/60 text-xs">
+              <tr>
+                <th class="p-2">Model</th>
+                <th class="p-2">R² Score</th>
+                <th class="p-2">MAE (₹)</th>
+                <th class="p-2">RMSE (₹)</th>
+                <th class="p-2">MAPE (%)</th>
+              </tr>
+            </thead>
+            <tbody id="metrics-price-tbody" class="divide-y divide-slate-800 text-xs">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Demand Estimation Model Table -->
+        <div class="space-y-1.5">
+          <h4 class="font-bold text-purple-400">2. Estimated Retail Demand Signal (kg/day)</h4>
+          <table class="w-full text-left bg-slate-950 rounded-lg overflow-hidden">
+            <thead class="text-slate-400 bg-slate-800/60 text-xs">
+              <tr>
+                <th class="p-2">Model</th>
+                <th class="p-2">R² Score</th>
+                <th class="p-2">MAE (kg)</th>
+                <th class="p-2">RMSE (kg)</th>
+                <th class="p-2">MAPE (%)</th>
+              </tr>
+            </thead>
+            <tbody id="metrics-demand-tbody" class="divide-y divide-slate-800 text-xs">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="flex justify-end pt-2">
+        <button id="btn-close-metrics-footer" class="bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEMO STEP MODAL / TOAST -->
+  <div id="demo-guide-toast" class="fixed bottom-6 right-6 z-50 bg-slate-900 border-2 border-amber-500/80 rounded-2xl p-4 shadow-2xl max-w-sm hidden space-y-2 animate-bounce-short">
+    <div class="flex items-center justify-between">
+      <span class="text-xs font-bold text-amber-400 flex items-center gap-1.5" id="demo-step-badge">
+        <i data-lucide="sparkles" class="w-4 h-4"></i> Step 1 of 3
+      </span>
+      <button id="btn-close-demo" class="text-slate-400 hover:text-white">&times;</button>
+    </div>
+    <p class="text-xs text-slate-200 leading-relaxed font-medium" id="demo-step-text">
+      Demonstrating baseline recommendation for ₹2,000 budget with 5kg Tomato on hand.
+    </p>
+    <div class="flex justify-end gap-2 pt-1">
+      <button id="btn-next-demo" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs px-3 py-1.5 rounded-lg">
+        Next Demo Step →
+      </button>
+    </div>
+  </div>
+
+  <!-- Application Script -->
+  <script src="/static/app.js"></script>
+</body>
+</html>
